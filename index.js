@@ -32,23 +32,6 @@ const start = async (questionsArr) => {
                     longAnswer = longAnswer.concat(`${answer}. `)
                 }
             } else {
-                let scoreAnswer = 0
-                while (true) {
-                    try {
-                        let currentAnswer = readlineSync.question(query).trim()
-                        console.log(currentAnswer)
-                        scoreAnswer = Number.parseInt(currentAnswer)
-                        if (scoreAnswer >= 1 && scoreAnswer <= 5) {
-                            break
-                        } else {
-                            console.log('\033[2J')
-                            console.log("Score should be between 1 to 5")
-                        }
-                    } catch (e) {
-                        console.log('\033[2J');
-                        console.log("Score is between 1 to 5")
-                    }
-                }
                 longAnswer = longAnswer.concat(`\nSCORE: ${answer}`)
             }
 
