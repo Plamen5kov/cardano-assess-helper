@@ -25,14 +25,36 @@ const start = async (questionsArr) => {
             var skip = answer === '' ? true : false
             answer = answer.charAt(0).toUpperCase() + answer.slice(1)
             const lastSymbolFromAnswer = answer.substring(answer.length - 1)
-            if(skip || lastSymbolFromAnswer === '.' || lastSymbolFromAnswer === '!' || lastSymbolFromAnswer === '?') {
-                longAnswer = longAnswer.concat(`${answer} `)
+            if (query.trim() !== 'SCORE:') {
+                if (skip || lastSymbolFromAnswer === '.' || lastSymbolFromAnswer === '!' || lastSymbolFromAnswer === '?') {
+                    longAnswer = longAnswer.concat(`${answer} `)
+                } else {
+                    longAnswer = longAnswer.concat(`${answer}. `)
+                }
             } else {
-                longAnswer = longAnswer.concat(`${answer}. `)
+                let scoreAnswer = 0
+                while (true) {
+                    try {
+                        let currentAnswer = readlineSync.question(query).trim()
+                        console.log(currentAnswer)
+                        scoreAnswer = Number.parseInt(currentAnswer)
+                        if (scoreAnswer >= 1 && scoreAnswer <= 5) {
+                            break
+                        } else {
+                            console.log('\033[2J')
+                            console.log("Score should be between 1 to 5")
+                        }
+                    } catch (e) {
+                        console.log('\033[2J');
+                        console.log("Score is between 1 to 5")
+                    }
+                }
+                longAnswer = longAnswer.concat(`\nSCORE: ${answer}`)
             }
+
         }
         report.push(longAnswer.trim())
     })
     fs.writeFileSync('./report.txt', report.join('\n'))
 }
-start([{"IMPACT:": impactQuestions}, {"FEASABILITY:": feasabilityQuestions}, {"AUDITABILITY:": auditabilityQuestions}])
+start([{ "IMPACT:": impactQuestions }, { "FEASABILITY:": feasabilityQuestions }, { "AUDITABILITY:": auditabilityQuestions }])
